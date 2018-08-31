@@ -11,6 +11,10 @@ FactoryGirl.define do
       parent { create(:person) }
     end
 
+    trait :with_nil_parent do
+      parent { create(:person, favorite_color: nil, last_name: nil, soccer_team: nil) }
+    end
+
     trait :with_clan do
       clan { create(:clan) }
     end

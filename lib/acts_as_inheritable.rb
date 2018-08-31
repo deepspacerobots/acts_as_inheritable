@@ -31,6 +31,37 @@ module ActsAsInheritable
         end
       end
 
+      def apply_relations_to_parent(model_parent = send(:parent), current = self)
+        if model_parent && current.class.method_defined?(:inheritable_configuration) && current.class.inheritable_configuration[:associations]
+          current.class.inheritable_configuration[:associations].each do |relation|
+            child_relation = send(relation)
+            relation_instances = child_relation.respond_to?(:each) ? child_relation : [child_relation].compact
+            relation_instances.each do |relation_instance|
+              apply_instance_to_parent(current, model_parent, relation, relation_instance)
+            end
+          end
+        end
+      end
+
+      def apply_instance_to_parent(current, model_parent, relation, relation_instance)
+        new_relation = relation_instance.dup
+        belongs_to_associations_names = current.class.reflect_on_all_associations(:belongs_to).collect(&:name)
+        saved =
+          # Is a `belongs_to` association
+          if belongs_to_associations_names.include?(relation.to_sym)
+            # You can define your own 'dup' method with a `duplicate!` signature
+            new_relation = relation_instance.duplicate! if relation_instance.respond_to?(:duplicate!)
+            model_parent.send("#{relation}=", new_relation)
+            model_parent.save
+          # else
+          #   # Is a `has_one | has_many` association
+          #   parent_name = verify_parent_name(new_relation, model_parent)
+          #   new_relation.send("#{parent_name}=", current)
+          #   new_relation.save
+          end
+          apply_relations_to_parent(relation_instance, new_relation) if saved
+      end
+
       def inherit_instance(current, model_parent, relation, relation_instance)
         new_relation = relation_instance.dup
         belongs_to_associations_names = model_parent.class.reflect_on_all_associations(:belongs_to).collect(&:name)
@@ -89,6 +120,25 @@ module ActsAsInheritable
           end
         end
       end
+
+      def apply_attributes_to_parent(force = false, not_force_for = [], method_to_update = nil)
+        available_methods = ['update_attributes', 'update_columns']
+        if has_parent? && self.class.inheritable_configuration[:attributes]
+          # Attributes
+          self.class.inheritable_configuration[:attributes].each do |attribute|
+            current_val = parent.send(attribute)
+            if (force && !not_force_for.include?(attribute)) || current_val.blank?
+              if method_to_update && available_methods.include?(method_to_update)
+                parent.send(method_to_update, {attribute => send(attribute)})
+              else
+                parent.send("#{attribute}=", send(attribute))
+              end
+            end
+          end
+        end
+      end
+
+
     end
   end
 
