@@ -1,0 +1,19 @@
+language: ruby
+
+cache: bundler
+
+rvm:
+  - 2.4.0
+  - 2.3.3
+  - 2.2.6
+  - 2.2.3
+
+env:
+  - DB=sqlite3
+
+gemfile:
+  - Gemfile
+
+sudo: false
+
+script: bundle exec rspec
