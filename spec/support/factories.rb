@@ -41,6 +41,15 @@ FactoryGirl.define do
       end
     end
 
+     trait :with_shoes_and_socks do
+      transient do
+        number_of_shoes 4
+      end
+      after :create do |person, evaluator|
+        create_list :shoe,  evaluator.number_of_shoes, :with_socks, person: person
+      end
+    end
+
     trait :with_pictures do
       transient do
         number_of_pictures 4
@@ -65,6 +74,10 @@ FactoryGirl.define do
     place    { Faker::Address.city }
   end
 
+  factory :sock do
+    name {Faker::Lorem.word }
+  end
+
   factory :toy do
     friendly    { [true, false].sample}
     material    { Faker::Lorem.word }
@@ -76,5 +89,9 @@ FactoryGirl.define do
     sneakers    { [true, false].sample}
     size       	{ Faker::Number.number(3) }
     brand       { Faker::Company.name }
+
+    trait :with_socks do
+      socks { create_list(:sock, 2) }
+    end
   end
 end

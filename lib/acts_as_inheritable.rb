@@ -97,8 +97,8 @@ module ActsAsInheritable
       #
       def apply_relations_to_parent(model_parent = send(:parent), current = self)
         if model_parent && current.class.method_defined?(:inheritable_configuration) && current.class.inheritable_configuration[:associations]
-          current.class.inheritable_configuration[:associations].each do |relation|
-            child_relation = send(relation)
+          model_parent.class.inheritable_configuration[:associations].each do |relation|
+            child_relation = current.send(relation)
             relation_instances = child_relation.respond_to?(:each) ? child_relation : [child_relation].compact
             relation_instances.each do |relation_instance|
               apply_instance_to_parent(current, model_parent, relation, relation_instance)

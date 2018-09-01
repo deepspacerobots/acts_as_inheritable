@@ -29,11 +29,19 @@ end
 class Shoe < ActiveRecord::Base
   # Associations
   belongs_to  :person
+  has_many    :socks
+  acts_as_inheritable attributes: %w(name),
+                      associations: %w(socks)
 end
 
 class Pet < ActiveRecord::Base
   # Associations
   belongs_to  :person
+end
+
+class Sock < ActiveRecord::Base
+  # Associations
+  belongs_to  :shoe
 end
 
 class Picture < ActiveRecord::Base

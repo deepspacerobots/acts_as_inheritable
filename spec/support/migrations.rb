@@ -9,7 +9,7 @@ initialize_database do
     t.string :last_name
     t.string :soccer_team
   end
-	add_reference :people, :parent, index: true
+  add_reference :people, :parent, index: true
 
   create_table :toys do |t|
     t.references 	:person, index: true
@@ -18,7 +18,7 @@ initialize_database do
     t.string 			:color
     t.string 			:brand
   end
-	add_foreign_key :toys, :people
+  add_foreign_key :toys, :people
 
   create_table :shoes do |t|
     t.references 	:person, index: true
@@ -26,7 +26,7 @@ initialize_database do
     t.integer 		:size
     t.string 			:brand
   end
-	add_foreign_key :shoes, :people
+  add_foreign_key :shoes, :people
 
   create_table :pictures do |t|
     t.references 	:imageable, polymorphic: true, index: true
@@ -46,5 +46,14 @@ initialize_database do
     t.string :breed
     t.timestamps null: false
   end
+
+
+  create_table :socks do |t|
+    t.belongs_to :shoe, index: true
+    t.string :name
+    t.timestamps null: false
+  end
+
+
 
 end
