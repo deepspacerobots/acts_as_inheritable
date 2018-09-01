@@ -193,17 +193,18 @@ RSpec.describe "ActiveRecord::Base model with #acts_as_inheritable" do
 
 
   describe '#apply_relations_to_parent' do
-    # describe '`has_one` associations' do
-    #   let(:person_parent) { create(:person, :with_pet) }
-    #   let!(:person){ create(:person, parent: person_parent) }
-#
-    #   it 're-creates the parent pet from the child pet' do
-    #     expect {
-    #       person.apply_relations_to_parent
-    #     }.to change(Pet, :count).by(1)
-    #     expect(person.pet.id).to_not eq person_parent.pet.id
-    #   end
-    # end
+    describe '`has_one` associations' do
+      let(:person_parent){ create(:person) }
+      let!(:person) { create(:person, :with_pet, parent: person_parent) }
+
+      it 're-creates the parent pet from the child pet' do
+       expect {
+         person.apply_relations_to_parent
+       }.to change(Pet, :count).by(1)
+       expect(person_parent.pet.id).to_not eq person.pet.id
+      end
+    end
+
     describe '`belongs_to` associations' do
       let(:person_parent) { create(:person) }
       let!(:person){ create(:person, :with_clan, parent: person_parent) }
@@ -217,34 +218,34 @@ RSpec.describe "ActiveRecord::Base model with #acts_as_inheritable" do
     end
     describe '`has_many` associations' do
 
-      let(:person_parent) { create(:person, :with_shoes, number_of_shoes: 2) }
-      let!(:person){ create(:person, parent: person_parent) }
+      let(:person_parent) { create(:person) }
+      let!(:person){ create(:person, :with_shoes, number_of_shoes: 2, parent: person_parent) }
 
       it 're-creates all the parent shoes from the child shoes' do
         expect {
-          person.inherit_relations
-        }.to change(Shoe, :count).by(person_parent.shoes.count)
+          person.apply_relations_to_parent
+        }.to change(Shoe, :count).by(person.shoes.count)
       end
 
       context 'when association is polymorphic' do
-        let(:person_parent) { create(:person, :with_pictures, number_of_pictures: 2) }
-        let!(:person){ create(:person, parent: person_parent) }
+        let(:person_parent) { create(:person) }
+        let!(:person){ create(:person, :with_pictures, number_of_pictures: 2, parent: person_parent) }
 
         it 're-creates all the parent pictures from the child pictures' do
           expect {
-            person.inherit_relations
-          }.to change(Picture, :count).by(person_parent.pictures.count)
+            person.apply_relations_to_parent
+          }.to change(Picture, :count).by(person.pictures.count)
         end
       end
 
       context 'when association uses a different name' do
-        let(:person_parent) { create(:person, :with_toys, number_of_toys: 2) }
-        let!(:person){ create(:person, parent: person_parent) }
+        let(:person_parent) { create(:person) }
+        let!(:person){ create(:person, :with_toys, number_of_toys: 2, parent: person_parent) }
 
         it 're-creates all the parent toys from the child toys' do
           expect {
-            person.inherit_relations
-          }.to change(Toy, :count).by(person_parent.toys.count)
+            person.apply_relations_to_parent
+          }.to change(Toy, :count).by(person.toys.count)
         end
       end
     end
