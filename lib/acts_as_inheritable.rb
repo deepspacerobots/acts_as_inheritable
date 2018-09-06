@@ -119,13 +119,12 @@ module ActsAsInheritable
             model_parent.send("#{relation}=", new_relation)
             saved = model_parent.save
           else
-
             # Is a `has_one | has_many` association
             child_name = verify_child_name(new_relation, current)
             new_relation.send("#{child_name}=", model_parent)
             saved = new_relation.save
           end
-          apply_relations_to_parent(relation_instance, new_relation) if saved
+          inherit_relations(relation_instance, new_relation) if saved
       end
 
       def verify_child_name(new_relation, current)
