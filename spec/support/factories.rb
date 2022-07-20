@@ -1,8 +1,8 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :person do
-    first_name              { Faker::Name.first_name }
+    first_name        { Faker::Name.first_name }
     favorite_color    { Faker::Commerce.color }
     last_name         { Faker::Name.last_name }
     soccer_team       { Faker::App.name }
@@ -25,7 +25,7 @@ FactoryGirl.define do
 
     trait :with_toys do
       transient do
-        number_of_toys 4
+        number_of_toys { 4 }
       end
       after :create do |person, evaluator|
         create_list :toy, evaluator.number_of_toys, owner: person
@@ -34,7 +34,7 @@ FactoryGirl.define do
 
     trait :with_shoes do
       transient do
-        number_of_shoes 4
+        number_of_shoes { 4 }
       end
       after :create do |person, evaluator|
         create_list :shoe, evaluator.number_of_shoes, person: person
@@ -43,7 +43,7 @@ FactoryGirl.define do
 
      trait :with_shoes_and_socks do
       transient do
-        number_of_shoes 4
+        number_of_shoes { 4 }
       end
       after :create do |person, evaluator|
         create_list :shoe,  evaluator.number_of_shoes, :with_socks, person: person
@@ -52,7 +52,7 @@ FactoryGirl.define do
 
     trait :with_pictures do
       transient do
-        number_of_pictures 4
+        number_of_pictures { 4 }
       end
       after :create do |person, evaluator|
         create_list :picture, evaluator.number_of_pictures, imageable: person
@@ -75,7 +75,7 @@ FactoryGirl.define do
   end
 
   factory :sock do
-    name {Faker::Lorem.word }
+    name { Faker::Lorem.word }
   end
 
   factory :toy do
@@ -87,7 +87,7 @@ FactoryGirl.define do
 
   factory :shoe do
     sneakers    { [true, false].sample}
-    size       	{ Faker::Number.number(3) }
+    size       	{ Faker::Number.number(digits: 3) }
     brand       { Faker::Company.name }
 
     trait :with_socks do

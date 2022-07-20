@@ -75,7 +75,7 @@ By default this method  will only set values that are [blank?](http://api.rubyon
 ###### params
   - `force`: Default to true. Set the attribute even if it's _present_.
   - `not_force_for`: Default to empty array. When setting `force` to _true_, you can also specify the attributes you don't want to overwrite.
-  - `method_to_update`: Default to nil. Uses the specified method (`update_attributes` or `update_columns`) instead of the normal asignation (`"#{attribute}="`). This is useful if you're using __inherit_attributes__  inside an `after_save` callback or if you want to skip validations for example.
+  - `method_to_update`: Default to nil. Uses the specified method (`update` or `update_columns`) instead of the normal asignation (`"#{attribute}="`). This is useful if you're using __inherit_attributes__  inside an `after_save` callback or if you want to skip validations for example.
 
 #### inherit_relations
 > Signature `inherit_relations(model_parent = send(:parent), current = self)`
