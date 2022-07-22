@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "nyan-cat-formatter", "~> 0.11"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4", ">= 0.4.3"
 
-  spec.add_runtime_dependency 'activesupport', '~> 6.0.5.1'
-  spec.add_runtime_dependency 'activerecord', '~> 6.0.5.1'
+  spec.add_runtime_dependency 'activesupport', '~> 6.1'
+  spec.add_runtime_dependency 'activerecord', '~> 6.1'
 end
