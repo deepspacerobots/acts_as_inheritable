@@ -75,7 +75,7 @@ module ActsAsInheritable
       end
 
       def inherit_attributes(force = false, not_force_for = [], method_to_update = nil)
-        available_methods = ['update_attributes', 'update_columns']
+        available_methods = ['update', 'update_columns']
         if has_parent? && self.class.inheritable_configuration[:attributes]
           # Attributes
           self.class.inheritable_configuration[:attributes].each do |attribute|
@@ -153,7 +153,7 @@ module ActsAsInheritable
 
 
       def apply_attributes_to_parent(force = false, not_force_for = [], method_to_update = nil)
-        available_methods = ['update_attributes', 'update_columns']
+        available_methods = ['update', 'update_columns']
         if has_parent? && self.class.inheritable_configuration[:attributes]
           # Attributes
           self.class.inheritable_configuration[:attributes].each do |attribute|

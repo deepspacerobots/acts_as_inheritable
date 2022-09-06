@@ -60,9 +60,9 @@ RSpec.describe "ActiveRecord::Base model with #acts_as_inheritable" do
       let(:person){ create(:person, :with_nil_parent, favorite_color: "black", last_name: "Jameson", soccer_team: "Ninjas") }
       let!(:person_parent) { person.parent }
 
-      context 'when `method_to_update` is `update_attributes`' do
+      context 'when `method_to_update` is `update`' do
         it 'passes values from child record and saves the parent' do
-          person.apply_attributes_to_parent false, [], 'update_attributes'
+          person.apply_attributes_to_parent false, [], 'update'
           person.reload
           expect(person_parent.favorite_color).to eq person.favorite_color
           expect(person_parent.last_name).to eq person.last_name
@@ -112,9 +112,9 @@ RSpec.describe "ActiveRecord::Base model with #acts_as_inheritable" do
     context 'when `method_to_update` is used and inheriting from parent' do
       let(:person){ create(:person, :with_parent, favorite_color: nil, last_name: nil, soccer_team: nil) }
       let!(:person_parent) { person.parent }
-      context 'when `method_to_update` is `update_attributes`' do
+      context 'when `method_to_update` is `update`' do
         it 'inherits values from his parent and saves the record' do
-          person.inherit_attributes false, [], 'update_attributes'
+          person.inherit_attributes false, [], 'update'
           person.reload
           expect(person.favorite_color).to eq person_parent.favorite_color
           expect(person.last_name).to eq person_parent.last_name
